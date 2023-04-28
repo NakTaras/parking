@@ -1,35 +1,63 @@
 package com.my.parking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+
+import javax.persistence.*;
+
+@Data
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "user")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Entity
 public class User {
+
+    @Id
     private long id;
+
+    @NonNull
     private String fullName;
+
+    @NonNull
     private String phoneNum;
+
+    @NonNull
+    @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+
+    @NonNull
+    @ManyToOne(fetch = FetchType.EAGER)
     private UserStatus userStatus;
 
-    public User(long id) {
-        this.id = id;
-        this.role = Role.USER;
-        this.userStatus = UserStatus.USER_ADDED;
-    }
+//    public User(long id) {
+//        this.id = id;
+//        this.role = Role.USER;
+//        this.userStatus = UserStatus.USER_ADDED;
+//        this.fullName = "unknown_name";
+//        this.phoneNum = "unknown_phone";
+//    }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public void setFullName(String fullName) {
+    public void setFullName(@NonNull String fullName) {
         this.fullName = fullName;
     }
 
-    public void setPhoneNum(String phoneNum) {
+    public void setPhoneNum(@NonNull String phoneNum) {
         this.phoneNum = phoneNum;
     }
 
-    public void setRole(Role role) {
+    public void setRole(@NonNull Role role) {
         this.role = role;
     }
 
-    public void setUserStatus(UserStatus userStatus) {
+    public void setUserStatus(@NonNull UserStatus userStatus) {
         this.userStatus = userStatus;
     }
 
@@ -37,19 +65,19 @@ public class User {
         return id;
     }
 
-    public String getFullName() {
+    public @NonNull String getFullName() {
         return fullName;
     }
 
-    public String getPhoneNum() {
+    public @NonNull String getPhoneNum() {
         return phoneNum;
     }
 
-    public Role getRole() {
+    public @NonNull Role getRole() {
         return role;
     }
 
-    public UserStatus getUserStatus() {
+    public @NonNull UserStatus getUserStatus() {
         return userStatus;
     }
 }

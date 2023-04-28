@@ -1,10 +1,13 @@
 package com.my.parking.processor.impl;
 
+import com.my.parking.enums.RoleEnum;
+import com.my.parking.enums.UserStatusEnum;
 import com.my.parking.messagesender.MessageSender;
 import com.my.parking.model.User;
-import com.my.parking.model.UserStatus;
 import com.my.parking.processor.Processor;
-import com.my.parking.repository.UserStorage;
+import com.my.parking.repository.RoleRepository;
+import com.my.parking.repository.UserRepository;
+import com.my.parking.repository.UserStatusRepository;
 import com.my.parking.util.ReplyKeyboardMarkupUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +15,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 @Component
@@ -21,20 +23,36 @@ public class MessageProcessor implements Processor {
     @Autowired
     private MessageSender messageSender;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserStatusRepository userStatusRepository;
+
     //Todo: додати щось типу userCreationCommand і в залежності від статусу користувача буде виконуватись певна команда
 
     @Override
     public void process(Update update) {
         Message message = update.getMessage();
         Long currentChatID = message.getChatId();
-        User user = UserStorage.getUsers().get(currentChatID);
+        User user = userRepository.findById(currentChatID).orElse(null);
         var replyKeyboardMarkup = ReplyKeyboardMarkupUtil.createReplyKeyboardMarkup(user);
 
         if (message.hasText()) {
             String messageText = message.getText();
 
             if (messageText.equals("Зареєструватись") && user == null) {
-                UserStorage.getUsers().put(currentChatID, new User(currentChatID));
+                User newUser = User.builder()
+                        .id(currentChatID)
+                        .fullName("unknown_name")
+                        .phoneNum("unknown_phone")
+                        .role(roleRepository.findRoleByName(RoleEnum.USER.name()))
+                        .userStatus(userStatusRepository.findUserStatusByName(UserStatusEnum.USER_ADDED.name()))
+                        .build();
+                userRepository.save(newUser);
                 sendMessage("Введіть свій ПІБ",
                         currentChatID,
                         //TODO: refactor ReplyKeyboardRemove
@@ -47,9 +65,12 @@ public class MessageProcessor implements Processor {
                         currentChatID,
                         replyKeyboardMarkup);
                 return;
-            } else if (user.getUserStatus().equals(UserStatus.USER_ADDED)) {
+            } else if (UserStatusEnum.USER_ADDED.name().equals(user.getUserStatus().getName())) {
                 user.setFullName(messageText);
-                user.setUserStatus(UserStatus.ADDED_USER_FULL_NAME);
+                user.setUserStatus(
+                        userStatusRepository.findUserStatusByName(
+                                UserStatusEnum.ADDED_USER_FULL_NAME.name()));
+                userRepository.save(user);
                 sendMessage("Відправте номер свого телефону",
                         currentChatID,
                         replyKeyboardMarkup);
@@ -65,10 +86,13 @@ public class MessageProcessor implements Processor {
                         currentChatID,
                         replyKeyboardMarkup);
             }
-        } else if (message.hasContact()) {
-            if (user.getUserStatus().equals(UserStatus.ADDED_USER_FULL_NAME)) {
+        } else if (message.hasContact() && user != null) {
+            if (UserStatusEnum.ADDED_USER_FULL_NAME.name().equals(user.getUserStatus().getName())) {
                 user.setPhoneNum(message.getContact().getPhoneNumber());
-                user.setUserStatus(UserStatus.USER_CREATED);
+                user.setUserStatus(
+                        userStatusRepository.findUserStatusByName(
+                                UserStatusEnum.USER_CREATED.name()));
+                userRepository.save(user);
 
                 sendMessage("Ви успішно зареєструвались" + System.lineSeparator()
                                 + "Ваші дані:" + System.lineSeparator()
