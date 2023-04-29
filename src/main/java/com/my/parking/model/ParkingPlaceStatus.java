@@ -11,25 +11,15 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "parking_place_status")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
-public class User {
-
+public class ParkingPlaceStatus {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
-    private String fullName;
+    private String name;
 
-    @NonNull
-    private String phoneNum;
-
-    @NonNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Role role;
-
-    @NonNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    private UserStatus userStatus;
 }

@@ -32,7 +32,6 @@ public class ParkingBot extends TelegramLongPollingBot {
     
     @Override
     public void onUpdateReceived(Update update) {
-
         if (update.hasMessage()) {
             messageProcessor.process(update);
         }

@@ -1,5 +1,6 @@
 package com.my.parking.util;
 
+import com.my.parking.enums.RoleEnum;
 import com.my.parking.enums.UserStatusEnum;
 import com.my.parking.model.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -8,7 +9,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 public class ReplyKeyboardMarkupUtil {
 
+    private ReplyKeyboardMarkupUtil() {
+    }
+
     public static ReplyKeyboardMarkup createReplyKeyboardMarkup(User user){
+
+        if (user != null && RoleEnum.ADMIN.name().equals(user.getRole().getName())) {
+            return createAdminReplyKeyboardMarkup();
+        } else {
+            return createUserReplyKeyboardMarkup(user);
+        }
+    }
+
+    private static ReplyKeyboardMarkup createAdminReplyKeyboardMarkup() {
+        return null;
+    }
+
+    private static ReplyKeyboardMarkup createUserReplyKeyboardMarkup(User user) {
         if (user == null) {
             return createRegistrationReplyKeyboardMarkup();
         } else if (UserStatusEnum.USER_ADDED.name().equals(user.getUserStatus().getName())) {

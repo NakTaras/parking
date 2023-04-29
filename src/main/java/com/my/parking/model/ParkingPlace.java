@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Data
 @Builder
@@ -11,25 +12,23 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "parking_place")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
-public class User {
-
+public class ParkingPlace {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
-    private String fullName;
-
-    @NonNull
-    private String phoneNum;
+    private Date date;
 
     @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
-    private Role role;
+    private Parking parking;
 
     @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
-    private UserStatus userStatus;
+    private ParkingPlaceStatus parkingPlaceStatus;
+
 }
