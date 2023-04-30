@@ -13,6 +13,7 @@ public class MessageSenderUtil {
         messageSender.sendMessage(
                 SendMessage.builder()
                         .text(messageText)
+                        .parseMode("HTML")
                         .replyMarkup(replyKeyboard)
                         .chatId(chatId)
                         .build());

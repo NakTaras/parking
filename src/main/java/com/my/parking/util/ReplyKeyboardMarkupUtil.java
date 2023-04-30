@@ -22,7 +22,13 @@ public class ReplyKeyboardMarkupUtil {
     }
 
     private static ReplyKeyboardMarkup createAdminReplyKeyboardMarkup() {
-        return null;
+        var button = new KeyboardRow();
+        button.add("Додати паркінг");
+        return ReplyKeyboardMarkup.builder()
+                .keyboardRow(button)
+                .resizeKeyboard(true)
+                .oneTimeKeyboard(true)
+                .build();
     }
 
     private static ReplyKeyboardMarkup createUserReplyKeyboardMarkup(User user) {
