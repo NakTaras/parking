@@ -1,25 +1,36 @@
-//package com.my.parking.processor.impl;
-//
-//import com.telegram.bot.command.Command;
-//import com.telegram.bot.command.CommandContainer;
-//import com.telegram.bot.processor.Processor;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Component;
-//import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-//import org.telegram.telegrambots.meta.api.objects.Update;
-//
-//@Component
-//public class CallBackQueryProcessor implements Processor {
-//
-//    @Autowired
-//    private CommandContainer commandContainer;
-//
-//    @Override
-//    public void process(Update update) {
-//        CallbackQuery callbackQuery = update.getCallbackQuery();
-//        String data = callbackQuery.getData();
-//
-//        Command command = commandContainer.getCommand(data.replaceAll("[0-9]", ""));
-//        command.execute(update);
-//    }
-//}
+package com.my.parking.processor.impl;
+
+
+import com.my.parking.enums.RoleEnum;
+import com.my.parking.model.User;
+import com.my.parking.processor.Processor;
+import com.my.parking.repository.UserRepository;
+import com.my.parking.roleprocessor.impl.AdminProcessor;
+import com.my.parking.roleprocessor.impl.UserProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
+@Component
+public class CallBackQueryProcessor implements Processor {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AdminProcessor adminProcessor;
+
+    @Autowired
+    private UserProcessor userProcessor;
+
+    @Override
+    public void process(Update update) {
+        User user = userRepository.findById(update.getCallbackQuery().getFrom().getId()).orElse(null);
+
+        if (user != null && RoleEnum.ADMIN.name().equals(user.getRole().getName())) {
+            adminProcessor.processCallBackQuery(update);
+        } else {
+            userProcessor.processCallBackQuery(update);
+        }
+    }
+}

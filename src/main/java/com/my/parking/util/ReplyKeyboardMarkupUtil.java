@@ -37,7 +37,18 @@ public class ReplyKeyboardMarkupUtil {
         } else if (UserStatusEnum.USER_ADDED.name().equals(user.getUserStatus().getName())) {
             return createContactReplyKeyboardMarkup();
         }
-        return null;
+        return createUserReplyKeyboardMarkup();
+    }
+
+    private static ReplyKeyboardMarkup createUserReplyKeyboardMarkup() {
+        var button = new KeyboardRow();
+        button.add("Список паркінгів");
+        button.add("Вибрати дату для бронювання");
+        return ReplyKeyboardMarkup.builder()
+                .keyboardRow(button)
+                .resizeKeyboard(true)
+                .oneTimeKeyboard(true)
+                .build();
     }
 
     private static ReplyKeyboardMarkup createRegistrationReplyKeyboardMarkup() {
