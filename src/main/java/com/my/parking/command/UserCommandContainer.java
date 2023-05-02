@@ -3,6 +3,7 @@ package com.my.parking.command;
 import com.my.parking.command.impl.ChooseDateCommand;
 import com.my.parking.command.impl.GetParkingListToReserveCommand;
 import com.my.parking.command.impl.NextDateCommand;
+import com.my.parking.command.impl.ReserveParkingCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +24,17 @@ public class UserCommandContainer {
     @Autowired
     private NextDateCommand nextDateCommand;
 
+    @Autowired
+    private ReserveParkingCommand reserveParkingCommand;
+
     public Command getCommand(String commandName) {
         if (null == commands){
             commands = new HashMap<>();
 
-            commands.put("Список паркінгів", getParkingListToReserveCommand);
+            commands.put("reserveDate", getParkingListToReserveCommand);
             commands.put("Вибрати дату для бронювання", chooseDateCommand);
             commands.put("nextDate", nextDateCommand);
+            commands.put("reserveParking", reserveParkingCommand);
         }
         return commands.get(commandName);
     }

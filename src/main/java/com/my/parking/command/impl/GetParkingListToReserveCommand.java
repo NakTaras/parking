@@ -2,14 +2,20 @@ package com.my.parking.command.impl;
 
 import com.my.parking.command.Command;
 import com.my.parking.messagesender.MessageSender;
-import com.my.parking.model.User;
-import com.my.parking.repository.UserRepository;
+import com.my.parking.model.Parking;
+import com.my.parking.repository.ParkingRepository;
 import com.my.parking.util.MessageSenderUtil;
-import com.my.parking.util.ReplyKeyboardMarkupUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class GetParkingListToReserveCommand implements Command {
@@ -18,19 +24,33 @@ public class GetParkingListToReserveCommand implements Command {
     private MessageSender messageSender;
 
     @Autowired
-    private UserRepository userRepository;
+    private ParkingRepository parkingRepository;
 
     @Override
     public void execute(Update update) {
-        Long currentChatID = update.getMessage().getChatId();
-        User user = userRepository.findById(currentChatID).orElse(null);
-        ReplyKeyboardMarkup replyKeyboardMarkup = ReplyKeyboardMarkupUtil.createReplyKeyboardMarkup(user);
+        CallbackQuery callbackQuery = update.getCallbackQuery();
+        Long currentChatID = callbackQuery.getFrom().getId();
+        String date = callbackQuery.getData().split("_")[1];
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
+        List<Parking> parkingList = parkingRepository.findAvailableParkingByDate(Date.valueOf(date));
 
+        for (Parking parking : parkingList) {
+            keyboard.add(
+                    Collections.singletonList(
+                            InlineKeyboardButton.builder()
+                                    .text(parking.getAddress().getName())
+                                    .callbackData("reserveParking_" + parking.getId() + "_" + date)
+                                    .build()));
+        }
 
-        MessageSenderUtil.sendMessage("",
+        InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder()
+                .keyboard(keyboard)
+                .build();
+
+        MessageSenderUtil.sendMessage("Натисніть на паркінг, щоб забронювати його на обрану дату",
                 currentChatID,
-                replyKeyboardMarkup,
+                inlineKeyboardMarkup,
                 messageSender);
     }
 }
