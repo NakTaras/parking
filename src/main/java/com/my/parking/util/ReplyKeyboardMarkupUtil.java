@@ -7,6 +7,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReplyKeyboardMarkupUtil {
 
     private ReplyKeyboardMarkupUtil() {
@@ -41,11 +44,22 @@ public class ReplyKeyboardMarkupUtil {
     }
 
     private static ReplyKeyboardMarkup createUserReplyKeyboardMarkup() {
-        var button = new KeyboardRow();
-        button.add("Список паркінгів");
-        button.add("Вибрати дату для бронювання");
+        var keyboardRow1 = new KeyboardRow();
+        var keyboardRow2 = new KeyboardRow();
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+
+        keyboardRow1.add("Список паркінгів");
+        keyboardRow2.add("Вибрати дату для бронювання");
+        keyboardRow1.add(KeyboardButton.builder()
+                .text("Знайти найближчий паркінг")
+                .requestLocation(true)
+                .build());
+
+        keyboardRowList.add(keyboardRow1);
+        keyboardRowList.add(keyboardRow2);
+
         return ReplyKeyboardMarkup.builder()
-                .keyboardRow(button)
+                .keyboard(keyboardRowList)
                 .resizeKeyboard(true)
                 .oneTimeKeyboard(true)
                 .build();

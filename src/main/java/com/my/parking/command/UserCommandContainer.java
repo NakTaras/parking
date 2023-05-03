@@ -1,9 +1,6 @@
 package com.my.parking.command;
 
-import com.my.parking.command.impl.ChooseDateCommand;
-import com.my.parking.command.impl.GetParkingListToReserveCommand;
-import com.my.parking.command.impl.NextDateCommand;
-import com.my.parking.command.impl.ReserveParkingCommand;
+import com.my.parking.command.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

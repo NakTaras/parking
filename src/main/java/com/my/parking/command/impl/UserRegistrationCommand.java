@@ -90,13 +90,13 @@ public class UserRegistrationCommand implements Command {
                                 UserStatusEnum.USER_CREATED.name()));
                 userRepository.save(user);
 
+                replyKeyboardMarkup = ReplyKeyboardMarkupUtil.createReplyKeyboardMarkup(user);
                 MessageSenderUtil.sendMessage("Ви успішно зареєструвались" + System.lineSeparator()
                                 + "Ваші дані:" + System.lineSeparator()
                                 + "ПІБ: " + user.getFullName() + System.lineSeparator()
                                 + "Номер телефону: " + user.getPhoneNum() + System.lineSeparator(),
                         currentChatID,
-                        //TODO: refactor ReplyKeyboardRemove
-                        ReplyKeyboardRemove.builder().removeKeyboard(true).build(),
+                        replyKeyboardMarkup,
                         messageSender);
             } else {
                 MessageSenderUtil.sendMessage("Ви ввели неправильну команду",
