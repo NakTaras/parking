@@ -68,8 +68,9 @@ public class ReserveParkingCommand implements Command {
         parkingPlaceRepository.save(parkingPlace);
 
         MessageSenderUtil.sendMessage("Ви зарезервували паркомісце на паркінгу за адресою " + parking.getAddress().getName() + System.lineSeparator()
-                + "Дата резерву: " + parkingPlace.getDate() + System.lineSeparator()
-                + "Номер резерву: " + parkingPlace.getId(),
+                        + "Дата резерву: " + parkingPlace.getDate() + System.lineSeparator()
+                        + String.format("Ціна за паркомісце: %.2f грн", parking.getPrice()) + System.lineSeparator()
+                        + "Номер резерву: " + parkingPlace.getId(),
                 currentChatID,
                 replyKeyboardMarkup,
                 messageSender);

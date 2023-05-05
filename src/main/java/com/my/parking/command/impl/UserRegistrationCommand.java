@@ -50,7 +50,7 @@ public class UserRegistrationCommand implements Command {
                         .userStatus(userStatusRepository.findUserStatusByName(UserStatusEnum.USER_ADDED.name()))
                         .build();
                 userRepository.save(newUser);
-                MessageSenderUtil.sendMessage("Введіть свій ПІБ",
+                MessageSenderUtil.sendMessage("Введіть своє ім'я",
                         currentChatID,
                         //TODO: refactor ReplyKeyboardRemove
                         ReplyKeyboardRemove.builder().removeKeyboard(true).build(),
@@ -93,7 +93,7 @@ public class UserRegistrationCommand implements Command {
                 replyKeyboardMarkup = ReplyKeyboardMarkupUtil.createReplyKeyboardMarkup(user);
                 MessageSenderUtil.sendMessage("Ви успішно зареєструвались" + System.lineSeparator()
                                 + "Ваші дані:" + System.lineSeparator()
-                                + "ПІБ: " + user.getFullName() + System.lineSeparator()
+                                + "Ім'я: " + user.getFullName() + System.lineSeparator()
                                 + "Номер телефону: " + user.getPhoneNum() + System.lineSeparator(),
                         currentChatID,
                         replyKeyboardMarkup,

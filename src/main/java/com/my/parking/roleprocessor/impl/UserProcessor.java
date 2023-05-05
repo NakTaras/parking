@@ -2,6 +2,7 @@ package com.my.parking.roleprocessor.impl;
 
 import com.my.parking.command.Command;
 import com.my.parking.command.UserCommandContainer;
+import com.my.parking.command.impl.ChangeUserPhoneNumberCommand;
 import com.my.parking.command.impl.GetNearestParkingCommand;
 import com.my.parking.command.impl.UserRegistrationCommand;
 import com.my.parking.command.impl.WrongRequestCommand;
@@ -33,6 +34,9 @@ public class UserProcessor implements RoleProcessor {
     @Autowired
     private GetNearestParkingCommand getNearestParkingCommand;
 
+    @Autowired
+    private ChangeUserPhoneNumberCommand changeUserPhoneNumberCommand;
+
     @Override
     public void processMessage(Update update) {
         Message message = update.getMessage();
@@ -54,6 +58,12 @@ public class UserProcessor implements RoleProcessor {
 
          if (message.hasLocation()) {
              getNearestParkingCommand.execute(update);
+             return;
+         }
+
+         if (message.hasContact()) {
+             changeUserPhoneNumberCommand.execute(update);
+             return;
          }
 
         if (command != null) {

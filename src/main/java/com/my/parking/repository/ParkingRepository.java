@@ -19,4 +19,8 @@ public interface ParkingRepository extends CrudRepository<Parking, Long> {
             "(SELECT COUNT(*) FROM parking_place pp WHERE pp.parking_id = p.id AND pp.date = ?2)",
             nativeQuery = true)
     Parking findParkingIfAvailableByDateAndId(long parkingId, Date date);
+
+    @Query(value = "SELECT p.number_of_parking_places FROM parking p WHERE p.id = ?1",
+            nativeQuery = true)
+    Integer findNumberOfParkingPlaces(long parkingId);
 }

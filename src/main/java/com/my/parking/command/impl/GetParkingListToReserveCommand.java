@@ -39,7 +39,7 @@ public class GetParkingListToReserveCommand implements Command {
             keyboard.add(
                     Collections.singletonList(
                             InlineKeyboardButton.builder()
-                                    .text(parking.getAddress().getName())
+                                    .text(parking.getAddress().getName() + String.format(" - Ціна за паркомісце %.2f грн", parking.getPrice()))
                                     .callbackData("reserveParking_" + parking.getId() + "_" + date)
                                     .build()));
         }

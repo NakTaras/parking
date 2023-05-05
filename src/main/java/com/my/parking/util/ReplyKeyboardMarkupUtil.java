@@ -46,17 +46,24 @@ public class ReplyKeyboardMarkupUtil {
     private static ReplyKeyboardMarkup createUserReplyKeyboardMarkup() {
         var keyboardRow1 = new KeyboardRow();
         var keyboardRow2 = new KeyboardRow();
+        var keyboardRow3 = new KeyboardRow();
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
 
         keyboardRow1.add("Список паркінгів");
-        keyboardRow2.add("Вибрати дату для бронювання");
         keyboardRow1.add(KeyboardButton.builder()
                 .text("Знайти найближчий паркінг")
                 .requestLocation(true)
                 .build());
+        keyboardRow2.add("Вибрати дату для бронювання");
+        keyboardRow3.add("Змінити ім'я");
+        keyboardRow3.add(KeyboardButton.builder()
+                .text("Змінити номер телефону")
+                .requestContact(true)
+                .build());
 
         keyboardRowList.add(keyboardRow1);
         keyboardRowList.add(keyboardRow2);
+        keyboardRowList.add(keyboardRow3);
 
         return ReplyKeyboardMarkup.builder()
                 .keyboard(keyboardRowList)

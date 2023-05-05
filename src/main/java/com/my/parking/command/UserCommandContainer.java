@@ -24,6 +24,21 @@ public class UserCommandContainer {
     @Autowired
     private ReserveParkingCommand reserveParkingCommand;
 
+    @Autowired
+    private ChooseDateForNearestParkingCommand chooseDateForNearestParkingCommand;
+
+    @Autowired
+    private NextDateForNearestParkingCommand nextDateForNearestParkingCommand;
+
+    @Autowired
+    private GetParkingListCommand getParkingListCommand;
+
+    @Autowired
+    private RequestChangeUserNameCommand requestChangeUserNameCommand;
+
+    @Autowired
+    private ChangeUserNameCommand changeUserNameCommand;
+
     public Command getCommand(String commandName) {
         if (null == commands){
             commands = new HashMap<>();
@@ -32,6 +47,11 @@ public class UserCommandContainer {
             commands.put("Вибрати дату для бронювання", chooseDateCommand);
             commands.put("nextDate", nextDateCommand);
             commands.put("reserveParking", reserveParkingCommand);
+            commands.put("reserveDateForNearestParking", chooseDateForNearestParkingCommand);
+            commands.put("nextDateForNearestParking", nextDateForNearestParkingCommand);
+            commands.put("Список паркінгів", getParkingListCommand);
+            commands.put("Змінити ім'я", requestChangeUserNameCommand);
+            commands.put("Нове ім'я", changeUserNameCommand);
         }
         return commands.get(commandName);
     }
