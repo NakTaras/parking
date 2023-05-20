@@ -1,5 +1,6 @@
 package com.my.parking.repository;
 
+import com.my.parking.model.Address;
 import com.my.parking.model.Parking;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -23,4 +24,6 @@ public interface ParkingRepository extends CrudRepository<Parking, Long> {
     @Query(value = "SELECT p.number_of_parking_places FROM parking p WHERE p.id = ?1",
             nativeQuery = true)
     Integer findNumberOfParkingPlaces(long parkingId);
+
+    Iterable<Parking> findParkingByAddressAndPriceAndNumberOfParkingPlaces(Address address, double price, int numberOfParkingPlaces);
 }

@@ -25,10 +25,16 @@ public class ReplyKeyboardMarkupUtil {
     }
 
     private static ReplyKeyboardMarkup createAdminReplyKeyboardMarkup() {
-        var button = new KeyboardRow();
-        button.add("Додати паркінг");
+        var keyboardRow1 = new KeyboardRow();
+        var keyboardRow2 = new KeyboardRow();
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        keyboardRow1.add("Додати паркінг");
+        keyboardRow1.add("Список бронювань на паркінгу");
+        keyboardRow2.add("Список паркінгів для оновлення даних");
+        keyboardRowList.add(keyboardRow1);
+        keyboardRowList.add(keyboardRow2);
         return ReplyKeyboardMarkup.builder()
-                .keyboardRow(button)
+                .keyboard(keyboardRowList)
                 .resizeKeyboard(true)
                 .oneTimeKeyboard(true)
                 .build();
@@ -47,6 +53,7 @@ public class ReplyKeyboardMarkupUtil {
         var keyboardRow1 = new KeyboardRow();
         var keyboardRow2 = new KeyboardRow();
         var keyboardRow3 = new KeyboardRow();
+        var keyboardRow4 = new KeyboardRow();
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
 
         keyboardRow1.add("Список паркінгів");
@@ -55,15 +62,18 @@ public class ReplyKeyboardMarkupUtil {
                 .requestLocation(true)
                 .build());
         keyboardRow2.add("Вибрати дату для бронювання");
+        keyboardRow2.add("Скасувати бронювання");
         keyboardRow3.add("Змінити ім'я");
         keyboardRow3.add(KeyboardButton.builder()
                 .text("Змінити номер телефону")
                 .requestContact(true)
                 .build());
+        keyboardRow4.add("Список активних бронювань");
 
         keyboardRowList.add(keyboardRow1);
         keyboardRowList.add(keyboardRow2);
         keyboardRowList.add(keyboardRow3);
+        keyboardRowList.add(keyboardRow4);
 
         return ReplyKeyboardMarkup.builder()
                 .keyboard(keyboardRowList)

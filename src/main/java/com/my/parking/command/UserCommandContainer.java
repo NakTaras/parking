@@ -37,7 +37,16 @@ public class UserCommandContainer {
     private RequestChangeUserNameCommand requestChangeUserNameCommand;
 
     @Autowired
+    private GetReservationsToCancelCommand getReservationsToCancelCommand;
+
+    @Autowired
+    private CancelReservationCommand cancelReservationCommand;
+
+    @Autowired
     private ChangeUserNameCommand changeUserNameCommand;
+
+    @Autowired
+    private GetReservationListByUserCommand getReservationListByUserCommand;
 
     public Command getCommand(String commandName) {
         if (null == commands){
@@ -52,6 +61,9 @@ public class UserCommandContainer {
             commands.put("Список паркінгів", getParkingListCommand);
             commands.put("Змінити ім'я", requestChangeUserNameCommand);
             commands.put("Нове ім'я", changeUserNameCommand);
+            commands.put("Скасувати бронювання", getReservationsToCancelCommand);
+            commands.put("cancelReservation", cancelReservationCommand);
+            commands.put("Список активних бронювань", getReservationListByUserCommand);
         }
         return commands.get(commandName);
     }

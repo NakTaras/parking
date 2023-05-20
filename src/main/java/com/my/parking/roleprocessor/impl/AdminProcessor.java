@@ -6,6 +6,7 @@ import com.my.parking.command.impl.WrongRequestCommand;
 import com.my.parking.roleprocessor.RoleProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -34,6 +35,10 @@ public class AdminProcessor implements RoleProcessor {
 
     @Override
     public void processCallBackQuery(Update update) {
+        CallbackQuery callbackQuery = update.getCallbackQuery();
+        String data = callbackQuery.getData();
 
+        Command command = adminCommandContainer.getCommand(data.split("_")[0]);
+        command.execute(update);
     }
 }

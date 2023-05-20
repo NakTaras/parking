@@ -1,7 +1,6 @@
 package com.my.parking.command;
 
-import com.my.parking.command.impl.AddParkingCommand;
-import com.my.parking.command.impl.CreateParkingCommand;
+import com.my.parking.command.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +18,40 @@ public class AdminCommandContainer {
     @Autowired
     private CreateParkingCommand createParkingCommand;
 
+    @Autowired
+    private GetParkingListToUpdateDataCommand getParkingListToUpdateDataCommand;
+
+    @Autowired
+    private GetParkingDataToUpdateCommand getParkingDataToUpdateCommand;
+
+    @Autowired
+    private UpdateParkingCommand updateParkingCommand;
+
+    @Autowired
+    private GetParkingListToGetReservationCommand getParkingListToGetReservationCommand;
+
+    @Autowired
+    private ChooseDateToGetReservationsCommand chooseDateToGetReservationsCommand;
+
+    @Autowired
+    private NextDateForReservationsCommand nextDateForReservationsCommand;
+
+    @Autowired
+    private GetReservationListByParkingAndDateCommand getReservationListByParkingAndDateCommand;
+
     public Command getCommand(String commandName) {
         if (null == commands){
             commands = new HashMap<>();
 
             commands.put("Додати паркінг", addParkingCommand);
             commands.put("Створити паркінг", createParkingCommand);
+            commands.put("Список паркінгів для оновлення даних", getParkingListToUpdateDataCommand);
+            commands.put("updateParking", getParkingDataToUpdateCommand);
+            commands.put("Оновити паркінг", updateParkingCommand);
+            commands.put("Список бронювань на паркінгу", getParkingListToGetReservationCommand);
+            commands.put("chooseDate", chooseDateToGetReservationsCommand);
+            commands.put("nextDateForReservations", nextDateForReservationsCommand);
+            commands.put("getReservations", getReservationListByParkingAndDateCommand);
         }
         return commands.get(commandName);
     }
