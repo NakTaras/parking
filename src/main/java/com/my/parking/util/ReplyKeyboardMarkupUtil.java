@@ -27,12 +27,15 @@ public class ReplyKeyboardMarkupUtil {
     private static ReplyKeyboardMarkup createAdminReplyKeyboardMarkup() {
         var keyboardRow1 = new KeyboardRow();
         var keyboardRow2 = new KeyboardRow();
+        var keyboardRow3 = new KeyboardRow();
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         keyboardRow1.add("Додати паркінг");
-        keyboardRow1.add("Список бронювань на паркінгу");
+        keyboardRow1.add("Список паркінгів");
         keyboardRow2.add("Список паркінгів для оновлення даних");
+        keyboardRow3.add("Список бронювань на паркінгу");
         keyboardRowList.add(keyboardRow1);
         keyboardRowList.add(keyboardRow2);
+        keyboardRowList.add(keyboardRow3);
         return ReplyKeyboardMarkup.builder()
                 .keyboard(keyboardRowList)
                 .resizeKeyboard(true)

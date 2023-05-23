@@ -39,6 +39,9 @@ public class AdminCommandContainer {
     @Autowired
     private GetReservationListByParkingAndDateCommand getReservationListByParkingAndDateCommand;
 
+    @Autowired
+    private GetParkingListCommand getParkingListCommand;
+
     public Command getCommand(String commandName) {
         if (null == commands){
             commands = new HashMap<>();
@@ -52,6 +55,7 @@ public class AdminCommandContainer {
             commands.put("chooseDate", chooseDateToGetReservationsCommand);
             commands.put("nextDateForReservations", nextDateForReservationsCommand);
             commands.put("getReservations", getReservationListByParkingAndDateCommand);
+            commands.put("Список паркінгів", getParkingListCommand);
         }
         return commands.get(commandName);
     }

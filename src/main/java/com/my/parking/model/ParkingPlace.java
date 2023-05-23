@@ -31,8 +31,4 @@ public class ParkingPlace {
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-    @NonNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    private ParkingPlaceStatus parkingPlaceStatus;
-
 }

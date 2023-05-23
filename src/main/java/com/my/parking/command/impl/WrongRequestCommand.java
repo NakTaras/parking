@@ -30,5 +30,7 @@ public class WrongRequestCommand implements Command {
                 currentChatID,
                 replyKeyboardMarkup,
                 messageSender);
+
+//        MessageSenderUtil.sendImage(currentChatID,messageSender);
     }
 }

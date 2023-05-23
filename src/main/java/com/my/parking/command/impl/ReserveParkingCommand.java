@@ -1,13 +1,11 @@
 package com.my.parking.command.impl;
 
 import com.my.parking.command.Command;
-import com.my.parking.enums.ParkingPlaceStatusEnum;
 import com.my.parking.messagesender.MessageSender;
 import com.my.parking.model.Parking;
 import com.my.parking.model.ParkingPlace;
 import com.my.parking.model.User;
 import com.my.parking.repository.ParkingPlaceRepository;
-import com.my.parking.repository.ParkingPlaceStatusRepository;
 import com.my.parking.repository.ParkingRepository;
 import com.my.parking.repository.UserRepository;
 import com.my.parking.util.MessageSenderUtil;
@@ -28,9 +26,6 @@ public class ReserveParkingCommand implements Command {
 
     @Autowired
     private ParkingPlaceRepository parkingPlaceRepository;
-
-    @Autowired
-    private ParkingPlaceStatusRepository parkingPlaceStatusRepository;
 
     @Autowired
     private ParkingRepository parkingRepository;
@@ -60,7 +55,6 @@ public class ReserveParkingCommand implements Command {
 
         ParkingPlace parkingPlace = ParkingPlace.builder()
                 .parking(parking)
-                .parkingPlaceStatus(parkingPlaceStatusRepository.findParkingPlaceStatusByName(ParkingPlaceStatusEnum.RESERVED.name()))
                 .date(date)
                 .user(user)
                 .build();
