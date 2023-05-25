@@ -48,6 +48,18 @@ public class UserCommandContainer {
     @Autowired
     private GetReservationListByUserCommand getReservationListByUserCommand;
 
+    @Autowired
+    private GetReservationsToRateCommand getReservationsToRateCommand;
+
+    @Autowired
+    private RatingListForReservationCommand ratingListForReservationCommand;
+
+    @Autowired
+    private RateReservationCommand rateReservationCommand;
+
+    @Autowired
+    private ReservationHistoryCommand reservationHistoryCommand;
+
     public Command getCommand(String commandName) {
         if (null == commands){
             commands = new HashMap<>();
@@ -64,6 +76,10 @@ public class UserCommandContainer {
             commands.put("Скасувати бронювання", getReservationsToCancelCommand);
             commands.put("cancelReservation", cancelReservationCommand);
             commands.put("Список активних бронювань", getReservationListByUserCommand);
+            commands.put("Оцінити бронювання", getReservationsToRateCommand);
+            commands.put("rateListForReservation", ratingListForReservationCommand);
+            commands.put("rateReservation", rateReservationCommand);
+            commands.put("Історія бронювань", reservationHistoryCommand);
         }
         return commands.get(commandName);
     }

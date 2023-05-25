@@ -4,6 +4,7 @@ import com.my.parking.command.Command;
 import com.my.parking.messagesender.MessageSender;
 import com.my.parking.model.Parking;
 import com.my.parking.model.User;
+import com.my.parking.repository.ParkingPlaceRepository;
 import com.my.parking.repository.ParkingRepository;
 import com.my.parking.repository.UserRepository;
 import com.my.parking.util.MessageSenderUtil;
@@ -23,6 +24,9 @@ public class GetParkingListCommand implements Command {
     private ParkingRepository parkingRepository;
 
     @Autowired
+    private ParkingPlaceRepository parkingPlaceRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -40,12 +44,15 @@ public class GetParkingListCommand implements Command {
                 parkingListInfo.append(System.lineSeparator()).append(System.lineSeparator());
             }
 
+            Double parkingRating = parkingPlaceRepository.getRatingByParkingId(parking.getId()).orElse(0.0);
             parkingListInfo.append(i).append(". ").append(parking.getAddress().getName())
                     .append(System.lineSeparator())
                     .append(String.format("Ціна за паркомісце: %.2f грн", parking.getPrice()))
                     .append(System.lineSeparator())
                     .append("Кількість паркомісць: ")
-                    .append(parking.getNumberOfParkingPlaces());
+                    .append(parking.getNumberOfParkingPlaces())
+                    .append(System.lineSeparator())
+                    .append(String.format("Рейтинг: %.1f", parkingRating));
             i++;
         }
 

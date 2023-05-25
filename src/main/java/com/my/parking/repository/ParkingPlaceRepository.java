@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.util.Optional;
 
 
 @Repository
@@ -19,5 +20,11 @@ public interface ParkingPlaceRepository extends CrudRepository<ParkingPlace, Lon
     Integer getAmountOfAvailableParkingPlaces(long parkingId, Date date);
 
     Iterable<ParkingPlace> findAllByUserAndDateGreaterThanEqual(User user, Date date);
+    Iterable<ParkingPlace> findAllByUserAndDateIsLessThanAndRatingIsNull(User user, Date date);
+    Iterable<ParkingPlace> findAllByUserAndDateIsLessThan(User user, Date date);
     Iterable<ParkingPlace> findAllByParkingAndDate(Parking parking, Date date);
+
+    @Query(value = "SELECT SUM(parking_place.rating)/COUNT(parking_place.rating) FROM parking_place WHERE parking_id = ?1",
+            nativeQuery = true)
+    Optional<Double> getRatingByParkingId(long parkingId);
 }

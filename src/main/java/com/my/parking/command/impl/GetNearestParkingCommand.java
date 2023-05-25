@@ -3,6 +3,7 @@ package com.my.parking.command.impl;
 import com.my.parking.command.Command;
 import com.my.parking.messagesender.MessageSender;
 import com.my.parking.model.Parking;
+import com.my.parking.repository.ParkingPlaceRepository;
 import com.my.parking.repository.ParkingRepository;
 import com.my.parking.util.LocationUtil;
 import com.my.parking.util.MessageSenderUtil;
@@ -13,15 +14,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Component
 public class GetNearestParkingCommand implements Command {
 
     @Autowired
     private ParkingRepository parkingRepository;
+
+    @Autowired
+    private ParkingPlaceRepository parkingPlaceRepository;
 
     @Autowired
     private MessageSender messageSender;
@@ -33,24 +37,37 @@ public class GetNearestParkingCommand implements Command {
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
-        Iterable<Parking> parkingList = parkingRepository.findAll();
+        Iterable<Parking> parkingIterable = parkingRepository.findAll();
+        List<Parking> parkingList = StreamSupport.stream(parkingIterable.spliterator(), false)
+                .collect(Collectors.toList());
 
-        Parking parking = LocationUtil.getNearestParking(message.getLocation(), parkingList);
+        Map<Parking, Double> nearestParking = new LinkedHashMap<>();
 
-        if (parking != null) {
-            keyboard.add(
-                    Collections.singletonList(
-                            InlineKeyboardButton.builder()
-                                    .text(parking.getAddress().getName() + String.format(" - Ціна за паркомісце %.2f грн", parking.getPrice()))
-                                    .callbackData("reserveDateForNearestParking_" + parking.getId())
-                                    .build()));
+        for (int i = 0; i < 3; i++){
+            Map.Entry<Parking, Double> parking = LocationUtil.getNearestParking(message.getLocation(), parkingList);
+            nearestParking.put(parking.getKey(), parking.getValue());
+            parkingList.remove(parking.getKey());
+        }
+
+        for (Map.Entry<Parking, Double> parkingEntry : nearestParking.entrySet()) {
+            keyboard.add(Collections.singletonList(
+                    InlineKeyboardButton.builder()
+                            .text(parkingEntry.getKey().getAddress().getName()
+                                    + String.format(" - %.2f грн"
+                                            + " - %.2f км" +
+                                            " - Рейтинг %.1f",
+                                            parkingEntry.getKey().getPrice(),
+                                            parkingEntry.getValue(),
+                                            parkingPlaceRepository.getRatingByParkingId(parkingEntry.getKey().getId()).orElse(0.0)))
+                            .callbackData("reserveDateForNearestParking_" + parkingEntry.getKey().getId())
+                            .build()));
         }
 
         InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder()
                 .keyboard(keyboard)
                 .build();
 
-        MessageSenderUtil.sendMessage("Це найближчий до вас паркінг, натисніть на нього, щоб обрати дату бронювання",
+        MessageSenderUtil.sendMessage("Це найближчі до вас паркінги, натисніть на нього, щоб обрати дату бронювання",
                 currentChatID,
                 inlineKeyboardMarkup,
                 messageSender);

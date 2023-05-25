@@ -23,6 +23,8 @@ public class ParkingPlace {
     @NonNull
     private Date date;
 
+    private Integer rating;
+
     @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
     private Parking parking;

@@ -57,6 +57,7 @@ public class ReplyKeyboardMarkupUtil {
         var keyboardRow2 = new KeyboardRow();
         var keyboardRow3 = new KeyboardRow();
         var keyboardRow4 = new KeyboardRow();
+        var keyboardRow5 = new KeyboardRow();
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
 
         keyboardRow1.add("Список паркінгів");
@@ -72,11 +73,14 @@ public class ReplyKeyboardMarkupUtil {
                 .requestContact(true)
                 .build());
         keyboardRow4.add("Список активних бронювань");
+        keyboardRow4.add("Оцінити бронювання");
+        keyboardRow5.add("Історія бронювань");
 
         keyboardRowList.add(keyboardRow1);
         keyboardRowList.add(keyboardRow2);
         keyboardRowList.add(keyboardRow3);
         keyboardRowList.add(keyboardRow4);
+        keyboardRowList.add(keyboardRow5);
 
         return ReplyKeyboardMarkup.builder()
                 .keyboard(keyboardRowList)
